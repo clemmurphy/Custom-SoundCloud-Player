@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="oli_css.css">
+  <script src="oli_js.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div class="test-wrapper">  
+
+    <div id="single-song-player">
+        <img data-amplitude-song-info="cover_art_url"/>
+        
+        <div class="bottom-container">
+          <div class="time-container">
+            <span class="current-time">
+              <span class="amplitude-current-hours"></span>:<span class="amplitude-current-minutes"></span>:<span class="amplitude-current-seconds"></span>
+            </span>
+              <progress class="amplitude-song-played-progress" id="song-played-progress"></progress>
+            <span class="duration">
+              <span class="amplitude-duration-hours"></span>:<span class="amplitude-duration-minutes"></span>:<span class="amplitude-duration-seconds"></span>
+            </span>
+          </div>
+  
+          <div class="control-container">
+            <div class="meta-container">
+              <span data-amplitude-song-info="name" id="trackName" class="song-name"></span>
+              <a href="#" target="_blank" data-amplitude-song-info="artist"></a>
+            </div>
+            <div class="play-btn-wrapper">
+              <div class="amplitude-play-pause" id="play-pause"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</body>
+</html>

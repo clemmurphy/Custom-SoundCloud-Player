@@ -1,31 +1,31 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-  const urlInput = document.getElementById('url-input')
-  let url = 'https://soundcloud.com/officialbyrontheaquarius/chop-crew-pt1'
+  // Change this URL variable in webflow
+  const url = 'https://soundcloud.com/officialbyrontheaquarius/chop-crew-pt1'
+  const iframeHtml = `<iframe id="player-iframe" width="100%" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${url}&amp;show_artwork=true&download=false&color=#000000&show_playcount=false" style="display: none;"></iframe>`
 
   const artistName = document.getElementById('artist-name')
   const trackName = document.getElementById('track-name')
 
-  const iframeWidget = SC.Widget('player-iframe')
+  const iframeWrapper = document.getElementById('iframe-wrapper')
+  iframeWrapper.innerHTML = iframeHtml
   const playerArtwork = document.getElementById('player-artwork')
   const playPauseButton = document.getElementById('play-pause')
-  const scLink = document.getElementById('sc-link')
+  const artistLink = document.getElementById('artist-link')
+  const iframeWidget = SC.Widget('player-iframe')
 
   playPauseButton.addEventListener('click', () => {
     if (playPauseButton.dataset.playing === '1') {
       iframeWidget.pause()
       playPauseButton.dataset.playing = '0'
-      playPauseButton.innerText = 'Play'
-      playPauseButton.classList.remove('pause-button')
-      playPauseButton.classList.add('play-button')
+      playPauseButton.classList.add('paused')
+      playPauseButton.classList.remove('playing')
     } else {
       iframeWidget.play()
       playPauseButton.dataset.playing = '1'
-      playPauseButton.innerText = 'Pause'
-      playPauseButton.classList.remove('play-button')
-      playPauseButton.classList.add('pause-button')
+      playPauseButton.classList.add('playing')
+      playPauseButton.classList.remove('paused')
     }
-    console.log('Play button clicked')
   })
 
   const getTrackData = () => {
@@ -34,27 +34,16 @@ window.addEventListener('DOMContentLoaded', () => {
         function(response){
           const res = response.json()
           res.then((data) => {
-            console.log(data)
             playerArtwork.src = data.thumbnail_url
             artistName.innerText = data.author_name
-            trackName.innerText = data.title
-            scLink.addEventListener('click', () => {
-              window.open(
-                data.author_url,
-                '_blank'
-              )
-            })
+            trackName.innerText = data.title.split(' by ')[0]
+            artistLink.href = data.author_url
           })
         }
       )
   }
 
   getTrackData()
-
-  urlInput.addEventListener('input', () => {
-    url = urlInput.value
-    getTrackData()
-  })
 
 })
 
