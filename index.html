@@ -39,7 +39,7 @@
       <div class="button-container">
         <button id='play-pause' class="player-controls paused" data-playing='0'></button>
       </div>
-      <a href="#" id="artist-link">Visit on Soundcloud</a>
+      <a href="#" id="artist-link" target="_blank">Visit on SoundCloud</a>
     </div>
   </div>
 
@@ -118,6 +118,9 @@
       font-size: 12px;
       color: #1C2F39;
       align-self: flex-end;
+    }
+    .player-container a:hover {
+      text-decoration: underline;
     }
     .track-details {
       margin: 20px 0;

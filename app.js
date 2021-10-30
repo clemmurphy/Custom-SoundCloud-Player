@@ -1,19 +1,22 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-  // Change this URL variable in webflow
+  // Change this URL variable in webflow - this is the track URL to embed
   const url = 'https://soundcloud.com/officialbyrontheaquarius/chop-crew-pt1'
 
   // iframe embed that will be hidden
-  const iframeHtml = `<iframe id="player-iframe" width="100%" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${url}&amp;show_artwork=true&download=false&color=#000000&show_playcount=false" style="display: none;"></iframe>`
+  const iframeHtml = `<iframe id="player-iframe" src="https://w.soundcloud.com/player/?url=${url}" style="display: none;"></iframe>`
 
   // Bringing in the DOM elements
+  // Artist and track details
   const artistName = document.getElementById('artist-name')
   const trackName = document.getElementById('track-name')
+  const artistLink = document.getElementById('artist-link')
+  // iframe to be hidden
   const iframeWrapper = document.getElementById('iframe-wrapper')
   iframeWrapper.innerHTML = iframeHtml
+  // Player details
   const playerArtwork = document.getElementById('player-artwork')
   const playPauseButton = document.getElementById('play-pause')
-  const artistLink = document.getElementById('artist-link')
   const progressBar = document.getElementById('progress-bar')
   const progressTimeline = document.getElementById('progress-timeline')
   const durationDisplay = document.getElementById('duration-display')
@@ -23,16 +26,19 @@ window.addEventListener('DOMContentLoaded', () => {
   const player = SC.Widget('player-iframe')
   player.bind(SC.Widget.Events.READY, () => {
 
-    // Player variables
+    // Player progress
     let duration = 0
     let progressPercent = 0
+    const getProgressInMs = () => {
+      return (progressPercent / 100) * duration
+    }
 
+    // Handle clicks to the progress bar to skip to selected place
     progressTimeline.addEventListener('click', (e) => {
       const percentPositionClicked = ((e.offsetX / progressTimeline.offsetWidth) * 100).toFixed(0)
       progressPercent = percentPositionClicked
-      const msPositionClicked = (progressPercent / 100) * duration
-      player.seekTo(msPositionClicked)
-      positionTime.innerText = msToMinutesAndSeconds(msPositionClicked)
+      player.seekTo(getProgressInMs())
+      positionTime.innerText = msToMinutesAndSeconds(getProgressInMs())
       progressBar.style.width = progressPercent + '%'
     })
 
@@ -53,7 +59,7 @@ window.addEventListener('DOMContentLoaded', () => {
           progressPercent = (position / duration) * 100
         })
         progressBar.style.width = progressPercent + '%'
-        positionTime.innerText = msToMinutesAndSeconds((progressPercent / 100) * duration)
+        positionTime.innerText = msToMinutesAndSeconds(getProgressInMs())
       }, 100)
     }
 
@@ -70,12 +76,11 @@ window.addEventListener('DOMContentLoaded', () => {
     // Stop trackPlaying when track ends
     player.bind(SC.Widget.Events.FINISH, () => {
       clearInterval(trackPlaying)
-      playPauseButton.dataset.playing = '0'
-      playPauseButton.classList.add('paused')
-      playPauseButton.classList.remove('playing')
+      playToPause()
     })
   })
 
+  // Converts ms duration to human-readable format
   const msToMinutesAndSeconds = (ms) => {
     const minutes = Math.floor(ms / 60000)
     const seconds = ((ms % 60000) / 1000).toFixed(0)
@@ -89,17 +94,25 @@ window.addEventListener('DOMContentLoaded', () => {
   // Set up buttons
   playPauseButton.addEventListener('click', () => {
     if (playPauseButton.dataset.playing === '1') {
-      player.pause()
-      playPauseButton.dataset.playing = '0'
-      playPauseButton.classList.add('paused')
-      playPauseButton.classList.remove('playing')
+      playToPause()
     } else {
-      player.play()
-      playPauseButton.dataset.playing = '1'
-      playPauseButton.classList.add('playing')
-      playPauseButton.classList.remove('paused')
+      pauseToPlay()
     }
   })
+
+  const playToPause = () => {
+    player.pause()
+    playPauseButton.dataset.playing = '0'
+    playPauseButton.classList.add('paused')
+    playPauseButton.classList.remove('playing')
+  }
+
+  const pauseToPlay = () => {
+    player.play()
+    playPauseButton.dataset.playing = '1'
+    playPauseButton.classList.add('playing')
+    playPauseButton.classList.remove('paused')
+  }
 
   // Track info API call and DOM setting
   const getTrackData = () => {
