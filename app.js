@@ -54,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
         })
         progressBar.style.width = progressPercent + '%'
         positionTime.innerText = msToMinutesAndSeconds((progressPercent / 100) * duration)
-      }, 500)
+      }, 100)
     }
 
     // Run trackPlaying when track plays
@@ -70,6 +70,9 @@ window.addEventListener('DOMContentLoaded', () => {
     // Stop trackPlaying when track ends
     player.bind(SC.Widget.Events.FINISH, () => {
       clearInterval(trackPlaying)
+      playPauseButton.dataset.playing = '0'
+      playPauseButton.classList.add('paused')
+      playPauseButton.classList.remove('playing')
     })
   })
 
