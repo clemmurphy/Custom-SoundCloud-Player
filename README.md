@@ -1,4 +1,5 @@
 # Custom SoundCloud Player
+![Screenshot 2021-11-02_18-04-06-881](https://user-images.githubusercontent.com/25615907/139921887-665d0605-3988-4383-9f00-64beabea5d33.png)
 
 ## What Is It?
 
@@ -18,4 +19,4 @@ I accomplished this by querying two separate endpoints and combining the results
 
 Webflow's scripts are also capped at 10,000 characters, so I had to keep the script extremely simple without any frameworks.
 
-The project is currently live on One House's website artist pages.
+The project is currently [live on One House's website artist pages](https://www.onehouse.com/artists/wayward).
